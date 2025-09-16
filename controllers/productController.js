@@ -2,6 +2,21 @@ import Product from "../models/product.js";
 
 export async function createProduct(req,res){
 
+    if(req.user == null){
+        res.status(403).json({
+            message : "Please logit to create user."
+        })
+
+        return;
+    }
+
+    if(req.user.role != "admin"){
+        res.status(403).json({
+            message : "You are not authorized for this action."
+        })
+
+        return;
+    }
     const product = new Product(req.body)
 
     try{
