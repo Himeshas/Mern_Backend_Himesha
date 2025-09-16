@@ -1,8 +1,8 @@
 import express, { response } from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import Student from "./models/student.js"; //methana .js enna eka manual add karaganna
-import studentRouter from "./routers/studentRouter.js";
+//import Student from "./models/student.js"; methana .js enna eka manual add karaganna
+
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 
@@ -50,7 +50,7 @@ mongoose.connect(connectionString).then(
     });
 
 
-app.use("/students",studentRouter);
+
 app.use("/users",userRouter)
 
 
