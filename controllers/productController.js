@@ -1,7 +1,8 @@
 import Product from "../models/product.js";
+import { isAdmin } from "./userController.js";
 
 export async function createProduct(req,res){
-
+/*
     if(req.user == null){
         res.status(403).json({
             message : "Please logit to create user."
@@ -16,7 +17,12 @@ export async function createProduct(req,res){
         })
 
         return;
-    }
+    }*/
+
+        if(!isAdmin(req)){
+            return res.status(403).json({message:"Access denied admins only"})
+        }
+
     const product = new Product(req.body)
 
     try{
@@ -30,4 +36,22 @@ export async function createProduct(req,res){
         console.log("Error creating product",error)
         return res.status(500).json({message : "Failed to create product."})
     }
+}
+
+export async function getProducts(req,res) {
+
+    try{
+
+        if(isAdmin(req)){
+
+            const products = await Product.find({isAvailable : true});
+            return res.json(products)
+        }
+    }catch(error){
+
+        console.error("Error fetching products.",error)
+        return res.status(500).json({message:"can't fetching products"})
+
+    }
+    
 }
