@@ -90,3 +90,64 @@ export async function deleteProduct(req,res){
     }
 }
 
+export async function updateProduct(req,res) {
+    
+    if(!isAdmin(req)){
+        res.status(403).json({
+
+            message: "Access denied, Admin users only"
+        })
+        return
+    }
+
+    const data = req.body;
+    const productID = req.body.productID;
+    //to prevent overwriting the productID in the request body
+    data.productID = productID;
+
+    try{
+        await Product.updateOne({
+            productID : productID,data
+        });
+
+        res.json({message : "Product updated successfully"})
+
+    }catch(error){
+        console.error("error updating product",error);
+     res.status(500).json({message : "Failed to update product"})
+     return
+    }
+
+
+}
+
+export async function getProductInfo(req,res) {
+    try{
+        const productID = req.params.productID;
+        const product = await Product.findOne({productId : productID})
+
+        if(product == null){
+
+            res.status(404).json({message : "Product not found"})
+
+     return
+
+        }
+
+        if(isAdmin(req)){
+
+            res.json(product)
+        }else{
+            if(product.isAvailable){
+                res.json(product)
+            }else{
+                res.status(404).json({message:"Product not found"})
+            }
+        }
+
+    }catch(error){
+        console.error("error getting product info",error);
+     res.status(500).json({message : "Failed to get product info"})
+     return
+    }
+}
