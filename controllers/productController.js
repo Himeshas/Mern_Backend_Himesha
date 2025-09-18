@@ -44,8 +44,14 @@ export async function getProducts(req,res) {
 
         if(isAdmin(req)){
 
+            const products = await Product.find();
+            return res.json(products)
+
+        }else{
+
             const products = await Product.find({isAvailable : true});
             return res.json(products)
+
         }
     }catch(error){
 
@@ -55,3 +61,32 @@ export async function getProducts(req,res) {
     }
     
 }
+
+export async function deleteProduct(req,res){
+
+    if(!isAdmin(req)){
+        res.status(403).json({
+
+            message: "Access denied, Admin users only"
+        })
+        return
+    }
+
+    try{
+        const productID = req.params.productID;
+
+        await Product.deleteOne(
+            {productID : productID}
+        )
+
+        res.json({message : "Product deleted successfully"})
+
+    }catch(error){
+
+     console.error("error deleting product",error);
+     res.status(500).json({message : "Failed to delete product"})
+     return
+
+    }
+}
+
