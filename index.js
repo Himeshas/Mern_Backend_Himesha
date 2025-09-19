@@ -6,12 +6,15 @@ import bodyParser from "body-parser";
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 import productRouter from "./routers/productRouter.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 
 
 
 const app = express();
-const connectionString = "mongodb+srv://himesha:1234@cluster0.ubbz7jg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const connectionString = process.env.Mongoose_URI
 
 app.use(bodyParser.json());
 
@@ -23,7 +26,7 @@ app.use(
         if(value != null){
 
             const token = value.replace("Bearer ","")
-            jwt.verify(token,"cbc-6505",
+            jwt.verify(token,process.env.JWT_Key,
                 (err,decoded)=>{
                     if(decoded == null){
 

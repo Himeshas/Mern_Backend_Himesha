@@ -1,6 +1,9 @@
 import Users from "../models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config()
 
 
 export function createUsers(req,res){
@@ -82,7 +85,7 @@ export function loginUser(req,res){
                             isEmailVerified : user.isEmailVerified,
                             image : user.image
                         },
-                        "cbc-6505"
+                        process.env.JWT_Key
                     )
 
                     res.json(
