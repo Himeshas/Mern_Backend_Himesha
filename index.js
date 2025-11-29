@@ -7,6 +7,7 @@ import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 import productRouter from "./routers/productRouter.js";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const app = express();
 const connectionString = process.env.Mongoose_URI
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use(
     (req,res,next)=>{
